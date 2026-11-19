@@ -51,6 +51,24 @@
 .map-layer{width:max-content;min-width:100%;min-height:100%}
 @media(max-width:680px){.map-viewport{height:68vh;min-height:360px;max-height:620px}.map-layer{width:100%;min-width:100%}}
 
+/* Layout final: painel equilibrado, cartões alinhados e rolagem discreta no mapa. */
+.map-shell{grid-template-columns:minmax(0,1fr) minmax(320px,360px);gap:0;border-radius:20px;background:var(--surface);}
+.map-viewport{height:min(70vh,720px);min-height:440px;overflow-y:auto;overflow-x:hidden;padding:0;background-color:var(--surface);background-image:radial-gradient(var(--line) .7px,transparent .7px);background-size:22px 22px;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:#a5b2ca transparent;touch-action:pan-y;cursor:default}
+.map-viewport::-webkit-scrollbar{width:10px}.map-viewport::-webkit-scrollbar-track{background:transparent}.map-viewport::-webkit-scrollbar-thumb{background:#a5b2ca;border:3px solid transparent;border-radius:99px;background-clip:padding-box}.dark .map-viewport::-webkit-scrollbar-thumb{background:#536682;border:3px solid transparent;background-clip:padding-box}
+.map-layer{position:relative;inset:auto;width:100%;min-width:100%;min-height:100%;padding:24px;transform-origin:0 0}
+.node-grid,.node-grid.grid-view,.node-grid.level-2,.node-grid.level-3{width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-content:start}
+.node-card{min-width:0;min-height:158px;padding:16px;border-radius:16px;border:1px solid var(--line);border-top:3px solid var(--accent);background:var(--surface);box-shadow:0 3px 12px #1c2e4a0a;justify-content:space-between}
+.node-card:hover{transform:translateY(-2px);box-shadow:0 9px 22px #1c2e4a16}
+.node-top{align-items:center}.node-index{font-size:11px;letter-spacing:.08em}.study-toggle{width:28px;height:28px}
+.node-heading{align-items:center;gap:11px;margin:12px 0}.node-sticker{width:40px;height:40px;flex-basis:40px;font-size:22px;border-radius:13px}
+.node-heading h3{font:700 15px/1.4 system-ui,sans-serif;margin:0 0 5px;overflow-wrap:anywhere}.node-heading p{font-size:13px;line-height:1.5;color:var(--muted)}
+.node-meta{margin-top:8px;padding-top:10px;border-top:1px solid var(--line);font-size:11px}.node-open{font-size:12px}
+.node-grid.level-3 .node-card{min-height:112px}.node-grid.level-3 .node-heading{margin:8px 0}.node-grid.level-3 .node-heading h3{font-size:14px}.node-grid.level-3 .node-meta{padding-top:7px}
+.detail-panel{max-height:min(70vh,720px);padding:24px;background:var(--surface);border-left:1px solid var(--line)}
+.toolbar{align-items:center;margin:16px 0 18px}.toolbar-actions{flex-wrap:wrap;justify-content:flex-end}.soft-button{padding:9px 11px}
+@media(max-width:1000px){.map-shell{grid-template-columns:minmax(0,1fr)}.map-viewport{height:62vh;min-height:400px}.detail-panel{max-height:none;border-left:0;border-top:1px solid var(--line)}.node-grid,.node-grid.grid-view,.node-grid.level-2,.node-grid.level-3{grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}}
+@media(max-width:680px){.map-shell{border-radius:16px}.map-viewport{height:58vh;min-height:350px;max-height:560px}.map-layer{padding:13px}.node-grid,.node-grid.grid-view,.node-grid.level-2,.node-grid.level-3{grid-template-columns:minmax(0,1fr);gap:10px}.node-card{min-height:0;padding:14px}.node-grid.level-3 .node-card{min-height:94px}.node-heading{margin:9px 0}.node-heading h3,.node-grid.level-3 .node-heading h3{font-size:15px}.toolbar-actions{justify-content:flex-start;overflow:visible}.toolbar-actions .soft-button{white-space:normal}.detail-panel{padding:18px}.detail-head h2{font-size:17px}}
+
   </style>
 </head>
 <body>
@@ -282,7 +300,7 @@ window.FARMA_QUIZZES={
   function card({id,title,desc,accent,index,meta,studiedKey,level}){
     const done=Boolean(studied[studiedKey]);
     const sticker=stickerFor(title,id);
-    return `<div class="node-card" role="button" tabindex="0" data-node="${esc(id)}" style="--accent:${accent}" aria-label="Abrir ${esc(title)}"><div class="node-top"><span class="node-index">${esc(index||'TÓPICO')}</span><button class="study-toggle ${done?'done':''}" data-study="${esc(studiedKey)}" aria-label="${done?'Marcar como não estudado':'Marcar como estudado'}" title="${done?'Estudado':'Marcar como estudado'}">${done?'✓':'○'}</button></div><div class="node-heading"><span class="node-sticker" aria-hidden="true">${sticker}</span><div><h3>${esc(title)}</h3><p>${esc(desc)}</p></div></div><div class="node-meta"><span>${esc(meta||'')}</span><span class="node-open">${level===1?'Explorar aula':level===2?'Abrir bloco':'Ver slide'} ·</span></div></div>`;
+    return `<div class="node-card" role="button" tabindex="0" data-node="${esc(id)}" style="--accent:${accent}" aria-label="Abrir ${esc(title)}"><div class="node-top"><span class="node-index">${esc(index||'TÓPICO')}</span><button class="study-toggle ${done?'done':''}" data-study="${esc(studiedKey)}" aria-label="${done?'Marcar como não estudado':'Marcar como estudado'}" title="${done?'Estudado':'Marcar como estudado'}">${done?'✓':'○'}</button></div><div class="node-heading"><span class="node-sticker" aria-hidden="true">${sticker}</span><div><h3>${esc(title)}</h3>${desc?`<p>${esc(desc)}</p>`:''}</div></div><div class="node-meta"><span>${esc(meta||'')}</span><span class="node-open">${level===1?'Explorar aula':level===2?'Abrir bloco':'Abrir tópico'} →</span></div></div>`;
   }
   function render(){
     breadcrumbs();
@@ -297,7 +315,7 @@ window.FARMA_QUIZZES={
       grid.className='node-grid level-2';
     }else{
       const l=lessonOf(lessonId),g=groupOf(l,groupId);if(!g){groupId=null;return render();}
-      g.pages.map(n=>pageOf(l,n)).filter(Boolean).forEach(p=>{html+=card({id:`${l.id}|${g.id}|${p.n}`,title:topicHeading(p),desc:'',accent:l.color,index:`TÓPICO ${p.n}`,meta:studied[detailKey(l,g,p)]?'Estudado':'Abrir figura',studiedKey:detailKey(l,g,p),level:3});});
+      g.pages.map(n=>pageOf(l,n)).filter(Boolean).forEach(p=>{html+=card({id:`${l.id}|${g.id}|${p.n}`,title:topicHeading(p),desc:'',accent:l.color,index:`TÓPICO ${p.n}`,meta:studied[detailKey(l,g,p)]?'✓ Estudado':'',studiedKey:detailKey(l,g,p),level:3});});
       grid.className='node-grid level-3';
     }
     grid.innerHTML=html;
