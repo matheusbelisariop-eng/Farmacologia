@@ -45,6 +45,11 @@
 @media(max-width:680px){.map-layer{width:100%;min-width:100%}.node-grid,.node-grid.grid-view,.node-grid.level-2,.node-grid.level-3{min-width:0;width:100%}}
 .topic-text{margin:14px 0 18px;padding:15px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
 .topic-text p:last-child{margin:0;color:var(--ink);font-size:15px;line-height:1.75;white-space:pre-wrap}
+/* Área própria de rolagem para percorrer todos os tópicos do mapa. */
+.map-viewport{height:min(72vh,760px);min-height:420px;overflow-y:scroll;overflow-x:auto;scrollbar-gutter:stable;scrollbar-width:auto;scrollbar-color:#7186b5 #e7ecf5}
+.dark .map-viewport{scrollbar-color:#6f88b8 #1b2940}
+.map-layer{width:max-content;min-width:100%;min-height:100%}
+@media(max-width:680px){.map-viewport{height:68vh;min-height:360px;max-height:620px}.map-layer{width:100%;min-width:100%}}
 
   </style>
 </head>
